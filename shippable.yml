@@ -1,22 +1,22 @@
 resources:
   - name: scripts
     type: gitRepo
-    integration: scm_gh_RIC03UEC
+    integration: scm_gh
     pointer:
       sourceName: ric03uec/seatrial
       branch: master
 
   - name: reg_dh
     type: integration
-    integration: reg_dh_RIC03UEC
+    integration: reg_dh
 
-  - name: cloud_awS
+  - name: cloud_aws
     type: integration
-    integration: cloud_aws_RIC03UEC
+    integration: cloud_aws
 
   - name: image_u16_base
     type: image
-    integration: reg_dh_RIC03UEC
+    integration: reg_dh
     pointer:
       sourceName: drydock/u16
     seed:
