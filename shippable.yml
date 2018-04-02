@@ -1,0 +1,81 @@
+resources:
+  - name: scripts
+    type: gitRepo
+    integration: scm_gh_RIC03UEC
+    pointer:
+      sourceName: ric03uec/seatrial
+      branch: master
+
+  - name: reg_dh
+    type: integration
+    integration: reg_dh_RIC03UEC
+
+  - name: cloud_awS
+    type: integration
+    integration: cloud_aws_RIC03UEC
+
+  - name: image_u16_base
+    type: image
+    integration: reg_dh_RIC03UEC
+    pointer:
+      sourceName: drydock/u16
+    seed:
+      versionName: master
+
+jobs:
+  - name: trigger_u16_base
+    type: runSh
+    steps:
+      - IN: scripts
+      - IN: image_u16_base
+      - TASK:
+          name: verify_image_tag
+          script:
+            - sudo docker images
+
+  - name: test_u16_base_java
+    type: runSh
+    steps:
+      - IN: scripts
+      - IN: image_u16_base
+      - IN: trigger_u16_base
+      - TASK:
+          name: verify_java_version
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
+          script:
+            - java -version
+
+  - name: test_u16_base_node
+    type: runSh
+    steps:
+      - IN: scripts
+      - IN: image_u16_base
+      - IN: trigger_u16_base
+      - TASK:
+          name: verify_node_version
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
+          script:
+            - node --version
+
+  - name: reconcile_u16_base
+    type: runSh
+    steps:
+      - IN: test_u16_base_java
+      - IN: test_u16_base_node
+      - TASK:
+          name: compile_results
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
+          script:
+            - node --version
+            - java -version
+
+
