@@ -54,7 +54,7 @@ jobs:
       - IN: image_u16_base
       - IN: trigger_u16_base
       - TASK:
-          name: verify_java_version
+          name: verify_ruby_version
           runtime:
             options:
               imageName: drydock/u16
