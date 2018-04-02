@@ -27,7 +27,6 @@ jobs:
     type: runSh
     steps:
       - IN: scripts
-      - IN: image_u16_base
       - TASK:
           name: verify_image_tag
           script:
@@ -47,6 +46,21 @@ jobs:
               imageTag: master
           script:
             - java -version
+
+  - name: test_u16_base_ruby
+    type: runSh
+    steps:
+      - IN: scripts
+      - IN: image_u16_base
+      - IN: trigger_u16_base
+      - TASK:
+          name: verify_java_version
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
+          script:
+            - ruby --version
 
   - name: test_u16_base_node
     type: runSh
@@ -68,6 +82,7 @@ jobs:
     steps:
       - IN: test_u16_base_java
       - IN: test_u16_base_node
+      - IN: test_u16_base_ruby
       - TASK:
           name: compile_results
           runtime:
