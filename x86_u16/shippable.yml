@@ -38,6 +38,10 @@ jobs:
             options:
               imageName: drydock/u16
               imageTag: master
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
           script:
             - java -version
 
@@ -126,6 +130,10 @@ jobs:
       - IN: reconcile_u16_base
       - TASK:
           name: verify_image_tag
+          runtime:
+            options:
+              imageName: drydock/u16all
+              imageTag: master
           script:
             - sudo docker images
 
@@ -143,5 +151,4 @@ jobs:
               imageTag: master
           script:
             - cd /u16all/test
-            - sudo docker images
             - ./_mysql.sh || true
