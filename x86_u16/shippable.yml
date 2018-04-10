@@ -203,7 +203,7 @@ jobs:
           name: verify_ruby_versions
           runtime:
             options:
-              imageName: drydock/u16phpall
+              imageName: drydock/u16ruball
               imageTag: master
           script:
             - echo '[[ -s /etc/profile.d/rvm.sh ]] && source /etc/profile.d/rvm.sh' >> /etc/drydock/.env
