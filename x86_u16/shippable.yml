@@ -152,3 +152,22 @@ jobs:
           script:
             - cd /u16all/test
             - ./_mysql.sh || true
+
+  ###################################
+  # x86_64 Ubuntu 16 language images
+  ###################################
+  - name: trigger_u16_lang
+    type: runSh
+    flags:
+      - x86_U16
+    steps:
+      - IN: scripts
+      - IN: test_u16_all
+      - TASK:
+          name: validate_image
+          runtime:
+            options:
+              imageName: drydock/u16all
+              imageTag: master
+          script:
+            - sudo docker images
