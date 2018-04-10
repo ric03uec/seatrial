@@ -143,5 +143,5 @@ jobs:
               imageTag: master
           script:
             - cd /u16all/test
-            - ls -atlh
-            - ./_mysql.sh
+            - sudo docker images
+            - ./_mysql.sh || true
