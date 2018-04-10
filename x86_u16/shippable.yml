@@ -6,10 +6,14 @@ resources:
       sourceName: drydock/u16
     seed:
       versionName: master
+    flags:
+      - x86_U16
 
 jobs:
   - name: test_u16_base_java
     type: runSh
+    flags:
+      - x86_U16
     steps:
       - IN: scripts
       - IN: image_u16_base
@@ -25,6 +29,8 @@ jobs:
 
   - name: test_u16_base_ruby
     type: runSh
+    flags:
+      - x86_U16
     steps:
       - IN: scripts
       - IN: image_u16_base
@@ -40,6 +46,8 @@ jobs:
 
   - name: test_u16_base_node
     type: runSh
+    flags:
+      - x86_U16
     steps:
       - IN: scripts
       - IN: image_u16_base
@@ -55,6 +63,8 @@ jobs:
 
   - name: test_u16_base_packages
     type: runSh
+    flags:
+      - x86_U16
     steps:
       - IN: scripts
       - IN: image_u16_base
@@ -71,6 +81,8 @@ jobs:
 
   - name: reconcile_u16_base
     type: runSh
+    flags:
+      - x86_U16
     steps:
       - IN: test_u16_base_java
       - IN: test_u16_base_node
@@ -85,5 +97,3 @@ jobs:
           script:
             - node --version
             - java -version
-
-
