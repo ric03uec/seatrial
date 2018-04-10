@@ -42,6 +42,8 @@ jobs:
               imageName: drydock/u16
               imageTag: master
           script:
+            # spin up a login shell to load rvm automatically
+            - /bin/bash --login
             - ruby --version
 
   - name: test_u16_base_node
