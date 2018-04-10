@@ -206,4 +206,7 @@ jobs:
               imageName: drydock/u16phpall
               imageTag: master
           script:
+            - echo '[[ -s /etc/profile.d/rvm.sh ]] && source /etc/profile.d/rvm.sh' >> /etc/drydock/.env
+            - source /etc/profile.d/rvm.sh
             - rvm list
+            - ruby --version
