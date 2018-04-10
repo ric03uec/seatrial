@@ -38,10 +38,6 @@ jobs:
             options:
               imageName: drydock/u16
               imageTag: master
-          runtime:
-            options:
-              imageName: drydock/u16
-              imageTag: master
           script:
             - java -version
 
