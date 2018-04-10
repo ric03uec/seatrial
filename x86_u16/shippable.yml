@@ -56,7 +56,8 @@ jobs:
               imageName: drydock/u16
               imageTag: master
           script:
-            - /usr/local/rvm/bin/rvm-shell
+            - echo '[[ -s /etc/profile.d/rvm.sh ]] && source /etc/profile.d/rvm.sh' >> /etc/drydock/.env
+            - [[ -s /etc/profile.d/rvm.sh ]] && source /etc/profile.d/rvm.sh
             - ruby --version
 
   - name: test_u16_base_node
