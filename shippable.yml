@@ -14,14 +14,6 @@ resources:
     type: integration
     integration: cloud_aws
 
-  - name: image_u16_base
-    type: image
-    integration: reg_dh
-    pointer:
-      sourceName: drydock/u16
-    seed:
-      versionName: master
-
 jobs:
   - name: trigger_u16_base
     type: runSh
@@ -31,66 +23,3 @@ jobs:
           name: verify_image_tag
           script:
             - sudo docker images
-
-  - name: test_u16_base_java
-    type: runSh
-    steps:
-      - IN: scripts
-      - IN: image_u16_base
-      - IN: trigger_u16_base
-      - TASK:
-          name: verify_java_version
-          runtime:
-            options:
-              imageName: drydock/u16
-              imageTag: master
-          script:
-            - java -version
-
-  - name: test_u16_base_ruby
-    type: runSh
-    steps:
-      - IN: scripts
-      - IN: image_u16_base
-      - IN: trigger_u16_base
-      - TASK:
-          name: verify_ruby_version
-          runtime:
-            options:
-              imageName: drydock/u16
-              imageTag: master
-          script:
-            - ruby --version
-
-  - name: test_u16_base_node
-    type: runSh
-    steps:
-      - IN: scripts
-      - IN: image_u16_base
-      - IN: trigger_u16_base
-      - TASK:
-          name: verify_node_version
-          runtime:
-            options:
-              imageName: drydock/u16
-              imageTag: master
-          script:
-            - node --version
-
-  - name: reconcile_u16_base
-    type: runSh
-    steps:
-      - IN: test_u16_base_java
-      - IN: test_u16_base_node
-      - IN: test_u16_base_ruby
-      - TASK:
-          name: compile_results
-          runtime:
-            options:
-              imageName: drydock/u16
-              imageTag: master
-          script:
-            - node --version
-            - java -version
-
-
