@@ -143,4 +143,5 @@ jobs:
               imageTag: master
           script:
             - cd /u16/test
+            - ls -atlh
             - ./_mysql.sh
