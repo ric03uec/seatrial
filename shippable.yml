@@ -23,3 +23,12 @@ jobs:
           name: verify_image_tag
           script:
             - sudo docker images
+
+  - name: trigger_u14_base
+    type: runSh
+    steps:
+      - IN: scripts
+      - TASK:
+          name: verify_image_tag
+          script:
+            - sudo docker images
