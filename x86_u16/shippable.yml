@@ -139,9 +139,8 @@ jobs:
           name: test_services
           runtime:
             options:
-              imageName: drydock/u16
+              imageName: drydock/u16all
               imageTag: master
           script:
             - cd /u16/test
-            - ls -atlh
             - ./_mysql.sh
