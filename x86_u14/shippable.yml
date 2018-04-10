@@ -1,0 +1,212 @@
+resources:
+  - name: image_u14_base
+    type: image
+    integration: reg_dh
+    pointer:
+      sourceName: drydock/u14
+    seed:
+      versionName: master
+    flags:
+      - x86_U14
+
+  - name: image_u14_all
+    type: image
+    integration: reg_dh
+    pointer:
+      sourceName: drydock/u14all
+    seed:
+      versionName: master
+    flags:
+      - x86_U14
+
+jobs:
+
+  ###################################
+  # x86_64 Ubuntu 16 Base Image
+  ###################################
+  - name: test_u14_base_java
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: image_u14_base
+      - IN: trigger_u14_base
+      - TASK:
+          name: verify_java_version
+          runtime:
+            options:
+              imageName: drydock/u14
+              imageTag: master
+          script:
+            - java -version
+
+  - name: test_u14_base_ruby
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: image_u14_base
+      - IN: trigger_u14_base
+      - TASK:
+          name: verify_ruby_version
+          runtime:
+            options:
+              imageName: drydock/u14
+              imageTag: master
+          script:
+            - echo '[[ -s /etc/profile.d/rvm.sh ]] && source /etc/profile.d/rvm.sh' >> /etc/drydock/.env
+            - source /etc/profile.d/rvm.sh
+            - ruby --version
+
+  - name: test_u14_base_node
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: image_u14_base
+      - IN: trigger_u14_base
+      - TASK:
+          name: verify_node_version
+          runtime:
+            options:
+              imageName: drydock/u14
+              imageTag: master
+          script:
+            - node --version
+
+  - name: test_u14_base_packages
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: image_u14_base
+      - IN: trigger_u14_base
+      - TASK:
+          name: verify_packages
+          runtime:
+            options:
+              imageName: drydock/u14
+              imageTag: master
+          script:
+            - git --version
+            - rsync --version
+
+  - name: reconcile_u14_base
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: test_u14_base_java
+      - IN: test_u14_base_node
+      - IN: test_u14_base_ruby
+      - IN: test_u14_base_packages
+      - TASK:
+          name: compile_results
+          runtime:
+            options:
+              imageName: drydock/u14
+              imageTag: master
+          script:
+            - node --version
+            - java -version
+
+  ###################################
+  # x86_64 Ubuntu 16 All Image
+  ###################################
+  - name: trigger_u14_all
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: reconcile_u14_base
+      - TASK:
+          name: verify_image_tag
+          runtime:
+            options:
+              imageName: drydock/u14all
+              imageTag: master
+          script:
+            - sudo docker images
+
+  - name: test_u14_all
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: trigger_u14_all
+      - TASK:
+          name: test_services
+          runtime:
+            options:
+              imageName: drydock/u14all
+              imageTag: master
+          script:
+            - cd /u14all/test
+            - ./_mysql.sh || true
+
+  ###################################
+  # x86_64 Ubuntu 16 language images
+  ###################################
+  - name: trigger_u14_lang
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: test_u14_all
+      - TASK:
+          name: validate_image
+          runtime:
+            options:
+              imageName: drydock/u14all
+              imageTag: master
+          script:
+            - sudo docker images
+
+  - name: test_u14_node
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: trigger_u14_lang
+      - TASK:
+          name: verify_node_versions
+          runtime:
+            options:
+              imageName: drydock/u14nodall
+              imageTag: master
+          script:
+            - nvm list
+
+  - name: test_u14_ruby
+    type: runSh
+    flags:
+      - x86_U14
+    steps:
+      - IN: scripts
+        switch: off
+      - IN: trigger_u14_lang
+      - TASK:
+          name: verify_ruby_versions
+          runtime:
+            options:
+              imageName: drydock/u14ruball
+              imageTag: master
+          script:
+            - echo '[[ -s /etc/profile.d/rvm.sh ]] && source /etc/profile.d/rvm.sh' >> /etc/drydock/.env
+            - source /etc/profile.d/rvm.sh
+            - rvm list
+            - ruby --version
