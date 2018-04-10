@@ -142,6 +142,6 @@ jobs:
               imageName: drydock/u16all
               imageTag: master
           script:
-            - cd /u16/test
+            - cd /u16all/test
             - ls -atlh
             - ./_mysql.sh
