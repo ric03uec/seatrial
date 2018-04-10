@@ -9,7 +9,21 @@ resources:
     flags:
       - x86_U16
 
+  - name: image_u16_all
+    type: image
+    integration: reg_dh
+    pointer:
+      sourceName: drydock/u16all
+    seed:
+      versionName: master
+    flags:
+      - x86_U16
+
 jobs:
+
+  ###################################
+  # x86_64 Ubuntu 16 Base Image
+  ###################################
   - name: test_u16_base_java
     type: runSh
     flags:
@@ -42,8 +56,7 @@ jobs:
               imageName: drydock/u16
               imageTag: master
           script:
-            # spin up a login shell to load rvm automatically
-            - /bin/bash --login
+            - /usr/local/rvm/bin/rvm-shell
             - ruby --version
 
   - name: test_u16_base_node
@@ -99,3 +112,7 @@ jobs:
           script:
             - node --version
             - java -version
+
+  ###################################
+  # x86_64 Ubuntu 16 All Image
+  ###################################
