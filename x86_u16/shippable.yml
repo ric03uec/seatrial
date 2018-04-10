@@ -167,3 +167,35 @@ jobs:
               imageTag: master
           script:
             - sudo docker images
+
+  - name: test_u16_node
+    type: runSh
+    flags:
+      - x86_U16
+    steps:
+      - IN: scripts
+      - IN: trigger_u16_lang
+      - TASK:
+          name: verify_node_versions
+          runtime:
+            options:
+              imageName: drydock/u16nodall
+              imageTag: master
+          script:
+            - nvm list
+
+  - name: test_u16_ruby
+    type: runSh
+    flags:
+      - x86_U16
+    steps:
+      - IN: scripts
+      - IN: trigger_u16_lang
+      - TASK:
+          name: verify_node_versions
+          runtime:
+            options:
+              imageName: drydock/u16phpall
+              imageTag: master
+          script:
+            - rmv list
