@@ -117,3 +117,30 @@ jobs:
   ###################################
   # x86_64 Ubuntu 16 All Image
   ###################################
+  - name: trigger_u16_all
+    type: runSh
+    flags:
+      - x86_U16
+    steps:
+      - IN: scripts
+      - IN: reconcile_u16_base
+      - TASK:
+          name: verify_image_tag
+          script:
+            - sudo docker images
+
+  - name: test_u16_all
+    type: runSh
+    flags:
+      - x86_U16
+    steps:
+      - IN: trigger_u16_all
+      - TASK:
+          name: test_services
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
+          script:
+            - cd /u16/test
+            - ./_mysql.sh
