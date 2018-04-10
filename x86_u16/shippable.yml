@@ -53,6 +53,22 @@ jobs:
           script:
             - node --version
 
+  - name: test_u16_base_packages
+    type: runSh
+    steps:
+      - IN: scripts
+      - IN: image_u16_base
+      - IN: trigger_u16_base
+      - TASK:
+          name: verify_packages
+          runtime:
+            options:
+              imageName: drydock/u16
+              imageTag: master
+          script:
+            - git --version
+            - rsync --version
+
   - name: reconcile_u16_base
     type: runSh
     steps:
